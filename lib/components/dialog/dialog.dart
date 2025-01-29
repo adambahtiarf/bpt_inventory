@@ -7,6 +7,7 @@ import 'package:sizer/sizer.dart';
 import '../../core/constant/app_colors.dart';
 import '../../core/constant/constants.dart';
 import '../../core/utils/app_util.dart';
+import '../button/button.dart';
 import '../spinner/spinner.dart';
 
 class AppDialog {
@@ -57,5 +58,62 @@ class AppDialog {
     }
 
     return null;
+  }
+
+  static Future<dynamic> confirmation({
+    required BuildContext context,
+    required String title,
+    required String description,
+    Function()? yesFunc,
+    Function()? noFunc,
+  }) {
+    Widget child = AlertDialog(
+      title: Text(
+        title,
+        style: TextStyle(
+          fontSize: 16.sp,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      content: Text(
+        description,
+        style: TextStyle(
+          fontSize: 14.sp,
+        ),
+      ),
+      actions: [
+        AppButton.text(
+          text: "No",
+          onPressed: () {
+            Navigator.pop(context); // Close the dialog
+            noFunc?.call();
+          },
+        ),
+        AppButton.text(
+          text: "Yes",
+          onPressed: () {
+            Navigator.pop(context); // Close the dialog
+            yesFunc?.call();
+          },
+        )
+      ],
+    );
+
+    if (Platform.isAndroid) {
+      return showDialog(
+        barrierDismissible: false,
+        builder: (_) => child,
+        context: context,
+      );
+    }
+
+    if (Platform.isIOS) {
+      return showCupertinoDialog(
+        barrierDismissible: false,
+        builder: (_) => child,
+        context: context,
+      );
+    }
+    return Future.value();
   }
 }

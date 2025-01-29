@@ -92,4 +92,10 @@ class AppIcon {
   static IconData addImage() => Icons.add_a_photo;
 
   static IconData info() => Icons.info_outline_rounded;
+
+  static IconData profile() => Icons.person_outline;
+
+  static IconData qr() => Icons.qr_code_scanner_rounded;
+
+  static IconData transaction() => Icons.receipt_long_outlined;
 }

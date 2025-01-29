@@ -14,7 +14,7 @@ class AuthController extends GetxController {
 
   RxBool obsecurePasswordInput = false.obs;
 
-  RxBool initLoading = true.obs;
+  RxBool initLoading = false.obs;
 
   RxBool loading = false.obs;
 
@@ -31,6 +31,21 @@ class AuthController extends GetxController {
 
       switch (event) {
         case AuthChangeEvent.initialSession:
+          initLoading.value = true;
+          final currentUser = supabase.auth.currentUser;
+          if (currentUser != null) {
+            user.value = UserModel(
+              id: currentUser.id,
+              email: currentUser.email ?? '',
+            );
+            if (currentRoute == '/') {
+              Get.offAllNamed('/home');
+            }
+          } else {
+            initLoading.value = false;
+          }
+          break;
+
         case AuthChangeEvent.signedIn:
           final currentUser = supabase.auth.currentUser;
           if (currentUser != null) {
@@ -49,10 +64,10 @@ class AuthController extends GetxController {
           if (currentRoute != '/') {
             Get.offAllNamed('/');
           }
+
           break;
 
         default:
-          // Optionally handle other events if needed
           break;
       }
     });
