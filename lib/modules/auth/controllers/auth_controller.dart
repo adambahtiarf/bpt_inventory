@@ -12,7 +12,7 @@ class AuthController extends GetxController {
 
   Rx<UserModel?> user = Rx<UserModel?>(null);
 
-  RxBool obsecurePasswordInput = false.obs;
+  RxBool obsecurePasswordInput = true.obs;
 
   RxBool initLoading = false.obs;
 

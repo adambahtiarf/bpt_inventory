@@ -7,16 +7,15 @@ import '../../../components/text/text.dart';
 import '../../../core/constant/app_colors.dart';
 import '../../../core/constant/app_enums.dart';
 import '../../../core/utils/app_util.dart';
-import '../../auth/controllers/auth_controller.dart';
 import '../controllers/profile_controller.dart';
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
+  final ProfileController _profileController = Get.find();
+
+  ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final AuthController _authController = Get.find();
-    final ProfileController _profileController = Get.find();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColor.blue0A1A48,

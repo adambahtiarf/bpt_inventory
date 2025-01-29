@@ -14,22 +14,22 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int selectedIndex = 0;
   static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> contents = <Widget>[
-    SafeArea(
+  static List<Widget> contents = <Widget>[
+    const SafeArea(
       child: Text(
         'Index 1: Home',
         style: optionStyle,
       ),
     ),
-    Text(
+    const Text(
       'Index 2: Assets',
       style: optionStyle,
     ),
-    Text(
+    const Text(
       'Index 3: QR',
       style: optionStyle,
     ),
-    Text(
+    const Text(
       'Index 4: Transaction',
       style: optionStyle,
     ),

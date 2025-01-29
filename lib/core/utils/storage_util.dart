@@ -4,8 +4,7 @@ class StorageUtil {
   static Future<String?> getToken() async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
-    print('token dari storage util => $token');
-    return prefs.getString('token');
+    return token;
   }
 
   static Future<void> saveToken(String token) async {
