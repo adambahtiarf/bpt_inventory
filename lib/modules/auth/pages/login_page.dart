@@ -20,8 +20,13 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AuthController authController = Get.find();
-    return Scaffold(
-      body: Padding(
+    return Scaffold(body: Obx(() {
+      if (authController.initLoading.value) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      }
+      return Padding(
         padding: EdgeInsets.symmetric(horizontal: 15.sp),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -94,7 +99,7 @@ class LoginPage extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
+      );
+    }));
   }
 }
