@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../../../components/icon/icon.dart';
 import '../../../core/constant/app_colors.dart';
+import '../../asset/pages/asset_content.dart';
 import '../../profile/pages/profile_page.dart';
+import '../../scanner/pages/scanner_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -21,14 +23,8 @@ class _HomePageState extends State<HomePage> {
         style: optionStyle,
       ),
     ),
-    const Text(
-      'Index 2: Assets',
-      style: optionStyle,
-    ),
-    const Text(
-      'Index 3: QR',
-      style: optionStyle,
-    ),
+    const AssetContent(),
+    const ScannerPage(),
     const Text(
       'Index 4: Transaction',
       style: optionStyle,

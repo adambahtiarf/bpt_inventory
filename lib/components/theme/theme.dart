@@ -208,6 +208,7 @@ class AppTheme {
             AppColor.orangeEC6B0C.value,
             AppColor.lightSwatch,
           ),
+          backgroundColor: AppColor.white,
         ).copyWith(surface: AppColor.white).copyWith(error: AppColor.redCF1322),
         drawerTheme: DrawerThemeData(
           endShape: const RoundedRectangleBorder(),
@@ -245,6 +246,12 @@ class AppTheme {
           labelColor: AppColor.black,
           dividerHeight: 0,
           unselectedLabelColor: AppColor.grey,
+        ),
+        dialogTheme: DialogTheme(
+          backgroundColor: AppColor.white, // Set background color to white
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.sp), // Set border radius to 8.0
+          ),
         ),
       );
 }

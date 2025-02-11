@@ -24,6 +24,12 @@ enum ImplEvent {
   getAccessCamera,
   getAccessLocation,
   loginFailed,
+  fetchFailed,
+  successShowAllData,
+  successSaveQr,
+  failedSaveQr,
+  failedToValidateAddAsset,
+  failedToAddAsset,
 }
 
 enum DeviceSizeEvent {

@@ -42,6 +42,7 @@ class AppInput {
     String? initialValue,
     EdgeInsets? contentPadding,
     bool? isDense,
+    Color? textColor,
   }) {
     Widget? suffix;
     Widget? prefix;
@@ -55,26 +56,30 @@ class AppInput {
     if (suffixWidget != null) {
       suffix = suffixWidget;
     } else {
-      suffix = AppButton.icon(
-        iconButtonSize: suffixIconSize,
-        suffixWidget: suffixWidget,
-        iconColor: suffixColor,
-        onPressed: suffixFunc,
-        iconData: suffixIcon,
-        isSuffix: true,
-      );
+      if (suffixIcon != null) {
+        suffix = AppButton.icon(
+          iconButtonSize: suffixIconSize,
+          suffixWidget: suffixWidget,
+          iconColor: suffixColor,
+          onPressed: suffixFunc,
+          iconData: suffixIcon,
+          isSuffix: true,
+        );
+      }
     }
     if (prefixWidget != null) {
       prefix = prefixWidget;
     } else {
-      prefix = AppButton.icon(
-        iconButtonSize: prefixIconSize,
-        suffixWidget: prefixWidget,
-        iconColor: prefixColor,
-        onPressed: prefixFunc,
-        iconData: prefixIcon,
-        isSuffix: false,
-      );
+      if (prefixIcon != null) {
+        prefix = AppButton.icon(
+          iconButtonSize: prefixIconSize,
+          suffixWidget: prefixWidget,
+          iconColor: prefixColor,
+          onPressed: prefixFunc,
+          iconData: prefixIcon,
+          isSuffix: false,
+        );
+      }
     }
     return TextFormField(
       onTap: readOnly ? onTapFunc : null,
@@ -162,6 +167,7 @@ class AppInput {
       maxLines: maxLines,
       minLines: minLines,
       enabled: enabled,
+      style: TextStyle(color: textColor ?? AppColor.black),
     );
   }
 }

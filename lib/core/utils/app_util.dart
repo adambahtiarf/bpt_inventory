@@ -207,4 +207,8 @@ class AppUtil {
       throw Exception('Failed to save image');
     }
   }
+
+  static void unfocus() {
+    FocusScope.of(Get.context!).unfocus();
+  }
 }

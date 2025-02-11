@@ -22,7 +22,7 @@ class ButtonUtils {
           break;
 
         case ButtonEvent.primary:
-          color = AppColor.blue1D4ED8;
+          color = AppColor.blue0A1A48;
 
           break;
 

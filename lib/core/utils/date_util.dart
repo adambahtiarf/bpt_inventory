@@ -5,6 +5,10 @@ class UtilDate {
     return DateFormat("dd-MM-yyyy HH:mm:ss").format(dateTime.toLocal());
   }
 
+  static String formatDate(DateTime dateTime) {
+    return DateFormat("yyyy-MM-dd").format(dateTime.toLocal());
+  }
+
   static String formatDateTimeWithOffset(DateTime dateTime) {
     final offset = dateTime.timeZoneOffset;
     final hoursOffset = offset.inHours.abs().toString().padLeft(2, '0');

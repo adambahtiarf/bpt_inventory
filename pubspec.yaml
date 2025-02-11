@@ -33,6 +33,10 @@ dependencies:
   connectivity_plus: ^6.1.2
   supabase_flutter: ^2.8.3
   persistent_bottom_nav_bar: ^6.2.1
+  carousel_slider: ^5.0.0
+  qr_flutter: ^4.1.0
+  screenshot: ^3.0.0
+  image_gallery_saver: ^2.0.3
 
 dev_dependencies:
 

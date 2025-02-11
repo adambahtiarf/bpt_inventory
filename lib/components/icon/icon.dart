@@ -98,4 +98,14 @@ class AppIcon {
   static IconData qr() => Icons.qr_code_scanner_rounded;
 
   static IconData transaction() => Icons.receipt_long_outlined;
+
+  static IconData borrow() => Icons.handshake_rounded;
+
+  static IconData plus() => Icons.add;
+
+  static IconData noImage() => Icons.image_not_supported_outlined;
+
+  static IconData pen() => Icons.edit_outlined;
+
+  static IconData dowload() => Icons.download_rounded;
 }

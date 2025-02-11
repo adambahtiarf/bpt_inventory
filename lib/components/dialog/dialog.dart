@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
@@ -115,5 +116,27 @@ class AppDialog {
       );
     }
     return Future.value();
+  }
+
+  static Future<dynamic> showImageDialog({
+    required BuildContext context,
+    required String imageUrl,
+  }) {
+    Widget child = Dialog(
+      backgroundColor: Colors.transparent,
+      child: CachedNetworkImage(
+        imageUrl: imageUrl,
+        fit: BoxFit.cover,
+        placeholder: (context, url) => const Center(
+          child: CircularProgressIndicator(),
+        ),
+        errorWidget: (context, url, error) => Icon(Icons.broken_image, size: 50.sp),
+      ),
+    );
+
+    return showDialog(
+      context: context,
+      builder: (_) => child,
+    );
   }
 }

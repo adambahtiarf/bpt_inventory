@@ -15,7 +15,21 @@ class ErrorMapperUtils {
         return "The app requires permission to access the location. Please enable location access.";
       case ImplEvent.loginFailed:
         return "Incorrect email or password.";
+      case ImplEvent.fetchFailed:
+        return "Failed to fetch data, please check your connection.";
+      case ImplEvent.successShowAllData:
+        return "All data has been displayed";
 
+      case ImplEvent.successSaveQr:
+        return "QR code save to gallery";
+
+      case ImplEvent.failedSaveQr:
+        return "Failed to save QR code";
+
+      case ImplEvent.failedToValidateAddAsset:
+        return "All data must be filled";
+      case ImplEvent.failedToAddAsset:
+        return "Opps...";
       default:
         return "";
     }
