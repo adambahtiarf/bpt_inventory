@@ -13,10 +13,10 @@ import '../../../components/text/text.dart';
 import '../../../core/constant/app_colors.dart';
 import '../../../core/constant/app_enums.dart';
 import '../../../core/constant/constants.dart';
-import '../../../core/utils/app_util.dart';
 import '../../../core/utils/date_util.dart';
 import '../../../main.dart';
 import '../../../routes/app_routes.dart';
+import '../components/current_borrower_card.dart';
 import '../controllers/asset_controller.dart';
 
 class AssetDetailPage extends StatefulWidget {
@@ -60,7 +60,7 @@ class _AssetDetailPageState extends State<AssetDetailPage> {
                     Get.toNamed(
                       AppRoutes.assetQR,
                       arguments: {
-                        "qrData": "https://example.com/asset/123", // TODO : CHANGE THIS TO REAL LINK
+                        "qrData": "https://www.bptasset.my.id/asset/${asset.assetCode}",
                         "assetCode": asset.assetCode,
                       },
                     );
@@ -80,8 +80,8 @@ class _AssetDetailPageState extends State<AssetDetailPage> {
                   return const Blank();
                 }
                 return AppButton.icon(
-                    onPressed: () {
-                      Get.toNamed(
+                    onPressed: () async {
+                      await Get.toNamed(
                         AppRoutes.assetEdit,
                         arguments: {
                           "asset": asset,
@@ -157,34 +157,7 @@ class _AssetDetailPageState extends State<AssetDetailPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         asset.status == "CURRENTLY BORROWED"
-                            ? Container(
-                                width: AppUtil.getDeviceSize(event: DeviceSizeEvent.width, context: context),
-                                margin: EdgeInsets.symmetric(vertical: 10.sp),
-                                decoration: BoxDecoration(
-                                  color: AppColor.blue0A1A48,
-                                  borderRadius: BorderRadius.circular(4.sp),
-                                ),
-                                padding: EdgeInsets.all(8.sp),
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      AppIcon.borrow(),
-                                      color: AppColor.white,
-                                    ),
-                                    SizedBox(
-                                      width: 8.sp,
-                                    ),
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        AppText.google(text: "Current Borrower", size: 8.sp, weight: FontWeight.w600, color: AppColor.white),
-                                        AppText.google(text: "Jessa Arditya - Sales", color: AppColor.white),
-                                        AppText.google(text: "Expected return : 10/02/2005", size: 7.sp, color: AppColor.white),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              )
+                            ? CurrentBorrowerCard(assetId: assetId)
                             : SizedBox(
                                 height: 10.sp,
                               ),
@@ -193,6 +166,7 @@ class _AssetDetailPageState extends State<AssetDetailPage> {
                           margin: EdgeInsets.symmetric(vertical: 5.sp),
                           child: Wrap(
                             spacing: 5.sp,
+                            runSpacing: 5.sp,
                             children: [
                               AppBadge.assetStatus(status: asset.status, size: 10.sp),
                               AppBadge.assetCondition(status: asset.condition, size: 10.sp),
@@ -235,6 +209,11 @@ class _AssetDetailPageState extends State<AssetDetailPage> {
                               child: AppText.google(text: "Activity Logs : ", weight: FontWeight.w500),
                             ),
                             GestureDetector(
+                              onTap: () async {
+                                await Get.toNamed(AppRoutes.assetActivityLogs, arguments: {
+                                  'asset': asset,
+                                });
+                              },
                               child: AppText.google(
                                 text: "Details",
                                 color: AppColor.orangeEC6B0C,
@@ -252,6 +231,11 @@ class _AssetDetailPageState extends State<AssetDetailPage> {
                               child: AppText.google(text: "Transaction Logs : ", weight: FontWeight.w500),
                             ),
                             GestureDetector(
+                              onTap: () async {
+                                await Get.toNamed(AppRoutes.assetTransactionsLogs, arguments: {
+                                  'asset': asset,
+                                });
+                              },
                               child: AppText.google(
                                 text: "Details",
                                 color: AppColor.orangeEC6B0C,
@@ -290,7 +274,18 @@ class _AssetDetailPageState extends State<AssetDetailPage> {
                 : AppButton.fill(
                     text: "Borrow Now",
                     buttonEvent: ButtonEvent.secondary,
-                    onPressed: () {},
+                    onPressed: () async {
+                      var result = await Get.toNamed(AppRoutes.borrow, arguments: {
+                        'asset': asset,
+                      });
+                      if (result != null && result is List) {
+                        kLogger.e(result);
+                        if (result[0] == true) {
+                          kLogger.e(result[0]);
+                          controller.fetchAssetDetail(assetId);
+                        }
+                      }
+                    },
                   );
           },
         ));

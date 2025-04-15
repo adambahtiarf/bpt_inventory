@@ -5,6 +5,8 @@ import '../../../core/constant/app_colors.dart';
 import '../../asset/pages/asset_content.dart';
 import '../../profile/pages/profile_page.dart';
 import '../../scanner/pages/scanner_page.dart';
+import '../../transaction/pages/transaction_content.dart';
+import 'home_content.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -17,18 +19,10 @@ class _HomePageState extends State<HomePage> {
   int selectedIndex = 0;
   static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static List<Widget> contents = <Widget>[
-    const SafeArea(
-      child: Text(
-        'Index 1: Home',
-        style: optionStyle,
-      ),
-    ),
+    const HomeContent(),
     const AssetContent(),
     const ScannerPage(),
-    const Text(
-      'Index 4: Transaction',
-      style: optionStyle,
-    ),
+    const TransactionContent(),
     ProfilePage()
   ];
 

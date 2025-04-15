@@ -11,6 +11,7 @@ import '../../../core/utils/error_mapper_utils.dart';
 import '../../../data/models/asset_model.dart';
 import '../../../data/models/category_model.dart';
 import '../../../data/models/create_asset_model.dart';
+import '../../../data/models/transaction_model.dart';
 import '../../../data/type/message_params.dart';
 import '../../../main.dart';
 
@@ -20,6 +21,7 @@ class AssetController extends GetxController {
   final Rx<AssetModel?> selectedAsset = Rx<AssetModel?>(null);
   final RxList<CategoryModel> categories = <CategoryModel>[].obs;
   final RxInt totalAsset = 0.obs;
+  final Rx<TransactionModel?> transaction = Rx<TransactionModel?>(null);
   // final Rx<CreateAssetModel?> assetForm = Rx<CreateAssetModel?>(null);
 
   Rx<FormAssetModel> createAsset = FormAssetModel(
@@ -68,7 +70,6 @@ class AssetController extends GetxController {
       final response = await supabase.from('assets').select('''
             *,
             asset_images (*),
-            asset_logs(*),
             categories!inner(*)
           ''').or('name.ilike.%$query%,asset_code.ilike.%$query%').order('created_at', ascending: false).range(offset, offset + limit - 1);
 
@@ -124,8 +125,10 @@ class AssetController extends GetxController {
       final response = await supabase.from('assets').select('''
             *,
             asset_images (*),
+            asset_logs(*),
+            transaction(*, employees(*)),
             categories!inner(*)
-          ''').eq('id', assetId).single();
+          ''').eq('id', assetId).order('created_at', ascending: false, referencedTable: 'asset_logs').single();
 
       if (response.isNotEmpty) {
         kLogger.e(response);
@@ -186,7 +189,13 @@ class AssetController extends GetxController {
         );
       }
     } catch (e) {
-      Get.snackbar('Error', 'Failed to fetch categories: $e');
+      kLogger.e(e);
+      MessageParams errMessage = (
+        message: "Failed to fetch categories",
+        messageEvent: MessageEvent.error,
+        context: Get.context!,
+      );
+      AppMessage.snackBar(errMessage);
     } finally {
       loading.value = false;
     }
@@ -308,8 +317,11 @@ class AssetController extends GetxController {
             .select('''
             *,
             asset_images (*),
+            asset_logs(*),
+            transaction(*, employees(*)),
             categories!inner(*)
           ''')
+            .order('created_at', ascending: false, referencedTable: 'asset_logs')
             .single();
 
         kLogger.i(updateAssetResponse);
@@ -332,15 +344,13 @@ class AssetController extends GetxController {
           kLogger.i(addAssetImageResponse);
         }
 
-        final newestData = await supabase
-            .from('assets')
-            .select('''
+        final newestData = await supabase.from('assets').select('''
             *,
             asset_images (*),
+            asset_logs(*),
+            transaction(*, employees(*)),
             categories!inner(*)
-          ''')
-            .eq('id', assetId) // Assuming `editAsset` has the asset ID
-            .single();
+          ''').eq('id', assetId).order('created_at', ascending: false, referencedTable: 'asset_logs').single();
 
         AssetModel data = AssetModel.fromMap(newestData);
         selectedAsset.value = data;
@@ -424,46 +434,30 @@ class AssetController extends GetxController {
 
   Future<void> deleteAssetImageById(int assetImageId, int index) async {
     try {
-      // Step 1: Fetch the specific image record by its ID
-      final imageRecord = await supabase
-          .from('asset_images')
-          .select('path') // Assuming 'path' is the column storing the file name in storage
-          .eq('id', assetImageId)
-          .single(); // Fetch a single record
+      final imageRecord = await supabase.from('asset_images').select('path').eq('id', assetImageId).single();
 
       if (imageRecord.isNotEmpty) {
         final String imagePath = imageRecord['path'];
 
-        // Step 2: Delete the image from Supabase Storage
         await supabase.storage.from('asset_images').remove([
           imagePath
         ]);
         kLogger.i("Deleted image from storage: $imagePath");
-
-        // Step 3: Delete the image record from the 'asset_images' table
-        await supabase.from('asset_images').delete().eq('id', assetImageId); // Delete based on asset_images.id
+        await supabase.from('asset_images').delete().eq('id', assetImageId);
         kLogger.i("Deleted image record from database with ID: $assetImageId");
 
-        // Step 4: Remove the image from the UI by updating the state
         editAsset.update((asset) {
-          asset?.images?.removeAt(index); // Remove the image at the specified index
+          asset?.images?.removeAt(index);
         });
 
-        // Step 5: Fetch the updated asset data from the database
-        final updatedAssetResponse = await supabase
-            .from('assets')
-            .select('''
+        final updatedAssetResponse = await supabase.from('assets').select('''
             *,
             asset_images (*),
             categories!inner(*)
-          ''')
-            .eq('id', editAsset.value.id!) // Assuming `editAsset` has the asset ID
-            .single();
+          ''').eq('id', editAsset.value.id!).single();
 
-        // Step 6: Convert the response to AssetModel
         final AssetModel updatedAsset = AssetModel.fromMap(updatedAssetResponse);
 
-        // Step 7: Update selectedAsset and assets list
         selectedAsset.value = updatedAsset;
         _updateAssetInList(updatedAsset.id, updatedAsset);
       } else {
@@ -509,5 +503,25 @@ class AssetController extends GetxController {
       );
       AppMessage.snackBar(errMessage);
     } finally {}
+  }
+
+  Future<void> findCurrentBorrower({required int assetId}) async {
+    try {
+      final response = await supabase.from('transaction').select('*, employees(*), assets(*, asset_images(*))').eq('asset_id', assetId).order('created_at', ascending: false).limit(1).maybeSingle();
+
+      if (response != null) {
+        transaction.value = TransactionModel.fromMap(response);
+      } else {}
+
+      kLogger.e(response);
+    } catch (e) {
+      kLogger.e(e);
+      MessageParams errMessage = (
+        message: ErrorMapperUtils.errMessage(implEvent: ImplEvent.fetchFailed),
+        messageEvent: MessageEvent.error,
+        context: Get.context!,
+      );
+      AppMessage.snackBar(errMessage);
+    }
   }
 }

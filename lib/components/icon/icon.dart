@@ -108,4 +108,6 @@ class AppIcon {
   static IconData pen() => Icons.edit_outlined;
 
   static IconData dowload() => Icons.download_rounded;
+
+  static IconData addEmployee() => Icons.person_add;
 }

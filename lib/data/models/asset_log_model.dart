@@ -14,7 +14,7 @@ class AssetLogModel {
   factory AssetLogModel.fromMap(Map<String, dynamic> data) {
     return AssetLogModel(
       id: data['id'],
-      createdAt: DateTime.parse(data['created_at']),
+      createdAt: DateTime.parse(data['created_at']).toLocal(),
       assetId: data['asset_id'],
       log: data['log'],
     );

@@ -2,13 +2,19 @@ import '../modules/asset/bindings/asset_bindigs.dart';
 import '../modules/asset/pages/asset_add_page.dart';
 import '../modules/asset/pages/asset_detail_page.dart';
 import '../modules/asset/pages/asset_edit_page.dart';
+import '../modules/asset/pages/asset_transaction_logs_page.dart';
+import '../modules/asset/pages/asset_logs_page.dart';
 import '../modules/asset/pages/asset_qr_code_page.dart';
 import '../modules/auth/bindings/auth_binding.dart';
 import '../modules/auth/pages/login_page.dart';
+import '../modules/borrow/bindings/borrow_binding.dart';
+import '../modules/borrow/pages/borrow_page.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/pages/home_page.dart';
 import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/pages/profile_page.dart';
+import '../modules/transaction/bindings/transaction_binding.dart';
+import '../modules/transaction/pages/return_page.dart';
 import 'app_routes.dart';
 import 'package:get/get.dart';
 
@@ -48,6 +54,26 @@ class AppPages {
       name: AppRoutes.assetEdit,
       page: () => const AssetEditPage(),
       binding: AssetBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.assetActivityLogs,
+      page: () => const AssetLogsPage(),
+      binding: AssetBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.assetTransactionsLogs,
+      page: () => const AssetTransactionsPage(),
+      binding: AssetBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.borrow,
+      page: () => const BorrowPage(),
+      binding: BorrowBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.transactionReturn,
+      page: () => const ReturnPage(),
+      binding: TransactionBinding(),
     ),
   ];
 }

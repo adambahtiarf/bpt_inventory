@@ -16,7 +16,7 @@ class CategoryModel {
       id: data['id'],
       code: data['code'],
       name: data['name'],
-      createdAt: DateTime.parse(data['created_at']),
+      createdAt: DateTime.parse(data['created_at']).toLocal(),
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'asset_image_model.dart';
 import 'asset_log_model.dart';
 import 'category_model.dart';
+import 'transaction_model.dart';
 
 class AssetModel {
   final int id;
@@ -15,6 +16,7 @@ class AssetModel {
   final DateTime? deletedAt;
   final List<AssetImageModel> images;
   final List<AssetLogModel> logs;
+  final List<TransactionModel> transactions;
   final CategoryModel? category; // Relationship
 
   AssetModel({
@@ -30,6 +32,7 @@ class AssetModel {
     this.deletedAt,
     required this.images,
     required this.logs,
+    required this.transactions,
     this.category,
   });
 
@@ -42,11 +45,12 @@ class AssetModel {
       condition: data['condition'],
       borrowable: data['borrowable'],
       status: data['status'],
-      purchaseDate: DateTime.parse(data['purchase_date']),
-      createdAt: DateTime.parse(data['created_at']),
-      deletedAt: data['deleted_at'] != null ? DateTime.parse(data['deleted_at']) : null,
+      purchaseDate: DateTime.parse(data['purchase_date']).toLocal(),
+      createdAt: DateTime.parse(data['created_at']).toLocal(),
+      deletedAt: data['deleted_at'] != null ? DateTime.parse(data['deleted_at']).toLocal() : null,
       images: (data['asset_images'] as List?)?.map((image) => AssetImageModel.fromMap(image)).toList() ?? [],
-      logs: (data['asset_logs'] as List?)?.map((log) => AssetLogModel.fromMap(log)).toList() ?? [],
+      logs: (data.containsKey('asset_logs') && data['asset_logs'] is List) ? (data['asset_logs'] as List).map((log) => AssetLogModel.fromMap(log)).toList() : [],
+      transactions: (data.containsKey('transaction') && data['transaction'] is List) ? (data['transaction'] as List).map((log) => TransactionModel.fromMap(log)).toList() : [],
       category: data['categories'] != null ? CategoryModel.fromMap(data['categories']) : null,
     );
   }
@@ -65,6 +69,7 @@ class AssetModel {
       'deleted_at': deletedAt?.toIso8601String(),
       'asset_images': images.map((image) => image.toMap()).toList(),
       'asset_logs': logs.map((log) => log.toMap()).toList(),
+      'asset_transaction': transactions.map((transaction) => transaction.toMap()).toList(),
     };
   }
 }

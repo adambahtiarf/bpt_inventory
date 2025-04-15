@@ -5,7 +5,8 @@ import 'package:sizer/sizer.dart';
 
 import '../../../components/scanner/scanner_buttons.dart';
 import '../../../components/scanner/scanner_error.dart';
-import '../../../core/utils/app_util.dart';
+
+import '../../../core/utils/string_util.dart';
 import '../../../routes/app_routes.dart';
 import '../../asset/controllers/asset_controller.dart';
 
@@ -35,7 +36,15 @@ class _ScannerPageState extends State<ScannerPage> {
       Barcode? brc = barcodes.barcodes.firstOrNull;
       if (brc?.displayValue != null && brc?.displayValue != "") {
         controller.pause();
-        await _assetController.fetchAssetDetailByAssetCode(brc?.displayValue);
+        String? scanedValue = brc?.displayValue;
+        if (scanedValue == null || scanedValue.isEmpty) {
+          return;
+        }
+        scanedValue = StringUtil.extractAssetCode(scanedValue);
+        if (scanedValue == null || scanedValue.isEmpty) {
+          return;
+        }
+        await _assetController.fetchAssetDetailByAssetCode(scanedValue);
         if (_assetController.selectedAsset.value != null) {
           await Get.toNamed(AppRoutes.assetDetail, arguments: {
             "assetId": _assetController.selectedAsset.value!.id,

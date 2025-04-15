@@ -14,7 +14,7 @@ class AssetImageModel {
   factory AssetImageModel.fromMap(Map<String, dynamic> data) {
     return AssetImageModel(
       id: data['id'],
-      createdAt: DateTime.parse(data['created_at']),
+      createdAt: DateTime.parse(data['created_at']).toLocal(),
       assetId: data['asset_id'],
       path: data['path'],
     );

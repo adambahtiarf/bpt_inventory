@@ -287,7 +287,7 @@ class AppSheet {
         isScrollControlled: true,
         isDismissible: false,
         enableDrag: false,
-        context: context,
+        context: Get.context!,
       );
     }
 
