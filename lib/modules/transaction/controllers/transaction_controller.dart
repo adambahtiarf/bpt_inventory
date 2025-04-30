@@ -6,6 +6,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../components/message/message.dart';
 import '../../../core/constant/app_enums.dart';
+import '../../../core/utils/date_util.dart';
 import '../../../data/models/transaction_model.dart';
 import '../../../data/type/message_params.dart';
 import '../../../main.dart';
@@ -81,10 +82,12 @@ class TransactionController extends GetxController {
 
       await supabase.from('transaction').update({
         'status': "RETURNED",
+        'actual_return_date': UtilDate.formatDate(DateTime.now()),
       }).eq('id', transactionId);
 
       await supabase.from('assets').update({
         'condition': status,
+        'status': "AVAILABLE"
       }).eq('id', assetId);
 
       Get.back(

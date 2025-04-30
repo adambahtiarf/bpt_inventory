@@ -134,7 +134,7 @@ class _BorrowPageState extends State<BorrowPage> {
                                       AppUtil.unfocus();
                                       final categoryOptions = controller.employees.map((employee) {
                                         return {
-                                          'label': '${employee.name} -r ${employee.department}',
+                                          'label': '${employee.name} - ${employee.department}',
                                           'value': employee.id,
                                         };
                                       }).toList();

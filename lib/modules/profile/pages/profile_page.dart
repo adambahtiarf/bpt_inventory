@@ -41,7 +41,7 @@ class ProfilePage extends StatelessWidget {
                     height: 5.sp,
                   ),
                   AppText.google(
-                    text: "admin@bpt.com",
+                    text: "inventory@bpt.com",
                   ),
                 ],
               ),

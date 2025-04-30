@@ -50,7 +50,7 @@ class BorrowController extends GetxController {
             'borrow_date': UtilDate.formatDate(now),
             'expected_return_date': createTransaction.value.expectedReturnDateTxtCtrl.text,
             'status': "BORROWED",
-            'purpose': createTransaction.value.notesCtrl.text,
+            'purpose': createTransaction.value.purposeTxtCtrl.text,
             'note': createTransaction.value.notesCtrl.text,
           }
         ]);
